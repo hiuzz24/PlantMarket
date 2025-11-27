@@ -1,11 +1,12 @@
 package pacman.plantmarket.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "roles")
@@ -18,4 +19,8 @@ public class Role {
 
     @Column(name = "role_name",unique = true,nullable = false)
     private String roleName;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "role")
+    private List<User> users;
 }
