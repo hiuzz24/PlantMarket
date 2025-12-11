@@ -36,9 +36,10 @@ category_id int,
 name varchar(50) not null,
 description varchar(255),
 price decimal(10,2) not null,
+is_best_seller boolean default 0,
 stock_quantity int not null check(stock_quantity >= 0),
 image_url varchar(500) not null,
-difficulty_level enum('easy','medium','hard') not null,
+difficulty_level enum('EASY','MEDIUM','HARD') not null,
 created_at datetime not null,
 updated_at datetime not null,
 is_deleted boolean default 0,
@@ -142,3 +143,71 @@ paid_at datetime,
 created_at datetime not null,
 foreign key (order_id) references orders(order_id)
 );
+
+
+INSERT INTO roles (role_name) VALUES ('ADMIN'), ('USER');
+
+
+INSERT INTO users (user_id, username, password, email, full_name, avatar_url, phone, address, role_id, status, created_at, updated_at)
+VALUES
+    (UUID(), 'admin1', '123', 'admin1@example.com', 'Admin One', 'https://example.com/avatar1.png', '0123456789', '123 Admin Street', 1, 1, NOW(), NOW()),
+    (UUID(), 'user1', '123', 'user1@example.com', 'User One', 'https://example.com/avatar2.png', '0987654321', '456 User Avenue', 2, 1, NOW(), NOW()),
+    (UUID(), 'mod1', '123', 'mod1@example.com', 'Moderator One', 'https://example.com/avatar3.png', '0112233445', '789 Mod Lane', 2, 1, NOW(), NOW());
+
+-- Categories
+INSERT INTO categories (category_name, is_deleted, description)
+VALUES
+    ('Indoor Plant Kits', 0, 'Complete kits for growing indoor plants at home.'),
+    ('Ornamental Plant Kits', 0, 'Kits for decorative plants to beautify your space.'),
+    ('Succulent & Cactus Kits', 0, 'Kits for growing low-maintenance succulents and cacti.'),
+    ('Bonsai Kits', 0, 'Artistic bonsai kits for beginners and enthusiasts.'),
+    ('Herb Kits', 0, 'Kits for growing culinary and aromatic herbs.');
+
+-- Products
+INSERT INTO products
+(category_id, name, description, price, is_best_seller, stock_quantity, image_url, difficulty_level, created_at, updated_at, is_deleted)
+VALUES
+    -- Indoor Plant Kits
+    (1, 'Monstera Plant Kit',
+     'Complete kit to grow a Monstera indoors, including soil, pot, and starter seedling.',
+     250000, 0, 20, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+
+    (1, 'Snake Plant Kit',
+     'Easy-care Snake Plant kit that includes soil, pot, and a healthy starter plant. Great for air purification.',
+     150000, 1, 30, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+
+    -- Ornamental Plant Kits
+    (2, 'Fiddle Leaf Fig Kit',
+     'Premium kit to grow a stylish Fiddle Leaf Fig tree indoors, perfect for home decor.',
+     380000, 0, 10, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+
+    (2, 'Peace Lily Kit',
+     'Complete Peace Lily growing kit that blooms beautifully and thrives in low light.',
+     200000, 0, 25, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+
+    -- Succulent & Cactus Kits
+    (3, 'Aloe Vera Kit',
+     'Beginner-friendly Aloe Vera growing kit with essential materials included.',
+     120000, 1, 40, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+
+    (3, 'Golden Barrel Cactus Kit',
+     'Complete kit to grow a Golden Barrel Cactus, ideal for decorative indoor setups.',
+     180000, 0, 15, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+
+    -- Bonsai Kits
+    (4, 'Maple Bonsai Kit',
+     'Artistic Maple Bonsai kit for creating a beautiful miniature tree.',
+     600000, 0, 5, '/images/image.png', 'HARD', NOW(), NOW(), 0),
+
+    (4, 'Juniper Bonsai Kit',
+     'Juniper Bonsai kit with shaping tools and starter materials, perfect for bonsai hobbyists.',
+     450000, 0, 8, '/images/image.png', 'HARD', NOW(), NOW(), 0),
+
+    -- Herb Kits
+    (5, 'Lavender Herb Kit',
+     'Fragrant Lavender growing kit that includes high-quality seeds and organic soil.',
+     220000, 1, 18, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+
+    (5, 'Mint Herb Kit',
+     'Easy-to-grow Mint kit ideal for fresh herbs, tea, and cooking.',
+     90000, 0, 35, '/images/image.png', 'EASY', NOW(), NOW(), 0);
