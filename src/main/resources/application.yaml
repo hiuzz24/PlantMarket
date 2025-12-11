@@ -19,4 +19,4 @@ spring:
   jackson:
     time-zone: Asia/Ho_Chi_Minh
 jwt:
-  secret: PacmanIsSoCool
+  secret: IAmPacmanIsSoCoolAndIncrediblyVip2004
