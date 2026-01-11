@@ -44,20 +44,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     userDetails.getAuthorities());
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Invalid token Or Expired");
+                    return;
                 }
             }
 
 
         } catch (io.jsonwebtoken.JwtException e) {
-            logger.warn("jwt expired");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid token Or Expired");
+            return;
         }
         filterChain.doFilter(request, response);
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request){
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.startsWith("/api/market")
+                || path.startsWith("/api/refreshToken")
                 || path.startsWith("/api/login")
                 || path.startsWith("/api/register");
     }

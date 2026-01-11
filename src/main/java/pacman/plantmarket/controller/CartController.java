@@ -42,4 +42,10 @@ public class CartController {
         cartService.updateCart(cartItemDTO);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/remove/{productId}")
+    public ResponseEntity<CartDTO> removeItem(@PathVariable  Integer productId){
+        CartDTO cartDTO = cartService.removeItem(productId);
+        return ResponseEntity.ok(cartDTO);
+    }
 }

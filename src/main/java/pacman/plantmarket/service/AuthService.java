@@ -7,6 +7,7 @@ import pacman.plantmarket.entity.User;
 
 public interface AuthService {
     TokenPairDTO login(LoginRequestDTO request);
+    void logout(String refreshToken);
     void saveRefreshToken(User user,String refreshToken);
     LoginResponseDTO generateNewAccessToken(String refreshToken);
 }

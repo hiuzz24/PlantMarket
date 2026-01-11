@@ -189,47 +189,47 @@ VALUES
     -- Indoor Plant Kits
     (1, 'Monstera Plant Kit',
      'Complete kit to grow a Monstera indoors, including soil, pot, and starter seedling.',
-     250000, 0, 20, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+     25000, 0, 20, '/images/image.png', 'EASY', NOW(), NOW(), 0),
 
     (1, 'Snake Plant Kit',
      'Easy-care Snake Plant kit that includes soil, pot, and a healthy starter plant. Great for air purification.',
-     150000, 1, 30, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+     15000, 1, 30, '/images/image.png', 'EASY', NOW(), NOW(), 0),
 
     -- Ornamental Plant Kits
     (2, 'Fiddle Leaf Fig Kit',
      'Premium kit to grow a stylish Fiddle Leaf Fig tree indoors, perfect for home decor.',
-     380000, 0, 10, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+     38000, 0, 10, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
 
     (2, 'Peace Lily Kit',
      'Complete Peace Lily growing kit that blooms beautifully and thrives in low light.',
-     200000, 0, 25, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+     20000, 0, 25, '/images/image.png', 'EASY', NOW(), NOW(), 0),
 
     -- Succulent & Cactus Kits
     (3, 'Aloe Vera Kit',
      'Beginner-friendly Aloe Vera growing kit with essential materials included.',
-     120000, 1, 40, '/images/image.png', 'EASY', NOW(), NOW(), 0),
+     12000, 1, 40, '/images/image.png', 'EASY', NOW(), NOW(), 0),
 
     (3, 'Golden Barrel Cactus Kit',
      'Complete kit to grow a Golden Barrel Cactus, ideal for decorative indoor setups.',
-     180000, 0, 15, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+     18000, 0, 15, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
 
     -- Bonsai Kits
     (4, 'Maple Bonsai Kit',
      'Artistic Maple Bonsai kit for creating a beautiful miniature tree.',
-     600000, 0, 5, '/images/image.png', 'HARD', NOW(), NOW(), 0),
+     60000, 0, 5, '/images/image.png', 'HARD', NOW(), NOW(), 0),
 
     (4, 'Juniper Bonsai Kit',
      'Juniper Bonsai kit with shaping tools and starter materials, perfect for bonsai hobbyists.',
-     450000, 0, 8, '/images/image.png', 'HARD', NOW(), NOW(), 0),
+     45000, 0, 8, '/images/image.png', 'HARD', NOW(), NOW(), 0),
 
     -- Herb Kits
     (5, 'Lavender Herb Kit',
      'Fragrant Lavender growing kit that includes high-quality seeds and organic soil.',
-     220000, 1, 18, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
+     22000, 1, 18, '/images/image.png', 'MEDIUM', NOW(), NOW(), 0),
 
     (5, 'Mint Herb Kit',
      'Easy-to-grow Mint kit ideal for fresh herbs, tea, and cooking.',
-     90000, 0, 35, '/images/image.png', 'EASY', NOW(), NOW(), 0);
+     9000, 0, 35, '/images/image.png', 'EASY', NOW(), NOW(), 0);
 
 -- Cart cho user1
 INSERT INTO carts (user_id, created_at)
@@ -276,3 +276,26 @@ VALUES ((SELECT cart_id
          WHERE u.username = 'user2'),
         9,
         1);
+
+ALTER TABLE orders
+    MODIFY COLUMN payment_method ENUM('COD', 'PAYOS') NOT NULL;
+
+ALTER TABLE payments
+    MODIFY COLUMN payment_method ENUM('COD', 'PAYOS') NOT NULL;
+
+ALTER TABLE orders
+    ADD COLUMN full_name VARCHAR(255) NOT NULL AFTER user_id,
+    ADD COLUMN phone_number VARCHAR(20) NOT NULL AFTER full_name,
+    ADD COLUMN email_address VARCHAR(100) AFTER phone_number,
+    ADD COLUMN notes TEXT AFTER payment_method;
+
+ALTER TABLE orders
+    MODIFY COLUMN status ENUM('PENDING', 'PAID', 'SHIPPED', 'DELIVERED', 'CANCELLED') DEFAULT 'PENDING';
+
+
+ALTER TABLE orders
+    ADD COLUMN shipping_fee DECIMAL(10, 2) NOT NULL DEFAULT 30000.00 AFTER total_amount;
+
+ALTER TABLE orders
+    ADD COLUMN order_code BIGINT UNIQUE AFTER order_id;
+

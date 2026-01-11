@@ -1,10 +1,7 @@
 package pacman.plantmarket.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "payments")
 public class Payment {
@@ -25,7 +23,7 @@ public class Payment {
     @Column(name = "order_id")
     private Integer orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Order order;
 
@@ -57,13 +55,5 @@ public class Payment {
         createdAt = LocalDateTime.now();
     }
 
-    public enum PaymentStatus {
-        PENDING,
-        SUCCESS,
-        FAILED
-    }
 
-    public enum PaymentMethod {
-        VNPAY
-    }
 }

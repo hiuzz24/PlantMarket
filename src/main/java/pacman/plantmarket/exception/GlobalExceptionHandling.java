@@ -28,4 +28,10 @@ public class GlobalExceptionHandling {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                 .body(Map.of("message",e.getMessage()));
     }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<Map<String,String>> paymentException(PaymentException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message",e.getMessage()));
+    }
 }

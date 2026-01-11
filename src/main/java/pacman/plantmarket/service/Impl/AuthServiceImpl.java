@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pacman.plantmarket.config.SecurityUltis;
 import pacman.plantmarket.dto.LoginRequestDTO;
 import pacman.plantmarket.dto.LoginResponseDTO;
@@ -42,6 +43,17 @@ public class AuthServiceImpl implements AuthService {
 
         saveRefreshToken(user,refreshToken);
         return new  TokenPairDTO(accessToken,refreshToken);
+    }
+
+    @Transactional
+    @Override
+    public void logout(String refreshToken) {
+        userTokenRepository.findByRefreshToken(refreshToken)
+                .ifPresent(t -> {
+                    t.setIsRevoked(true);
+                    t.setExpiresAt(LocalDateTime.now());
+                    userTokenRepository.save(t);
+                });
     }
 
     @Override
