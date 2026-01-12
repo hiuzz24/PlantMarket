@@ -10,8 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import pacman.plantmarket.entity.web.User;
-import pacman.plantmarket.repository.web.UserRepository;
+import pacman.plantmarket.entity.User;
+import pacman.plantmarket.repository.UserRepository;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -41,9 +41,21 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .claim("role",role)
                 .claim("userId",user.getUserId())
+                .claim("fullname",user.getFullName())
                 .setIssuer("pacman")
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 ))
+                .signWith(getSigningKey(),SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshToken(User user){
+        return Jwts.builder()
+                .setId(UUID.randomUUID().toString())
+                .setSubject(user.getUsername())
+                .setIssuer("pacman")
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSigningKey(),SignatureAlgorithm.HS256)
                 .compact();
     }
