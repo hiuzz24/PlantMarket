@@ -21,7 +21,7 @@ public class Post {
     @Column(name = "post_id")
     private Integer postId;
 
-    @Column(name = "user_id",length = 36)
+    @Column(name = "user_id",columnDefinition = "char(36)")
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

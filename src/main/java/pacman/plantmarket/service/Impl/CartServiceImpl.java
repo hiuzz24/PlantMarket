@@ -137,7 +137,7 @@ public class CartServiceImpl implements CartService {
     public void clearCartByUserId(String userId) {
         Cart cart = cartRepository.findCartByUser_UserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("not found cart"));
-        cartRepository.delete(cart);
+        cartItemRepository.deleteCartItemsByCart_CartId(cart.getCartId());
     }
 
     @Transactional

@@ -21,7 +21,7 @@ public class Notification {
     @Column(name = "notification_id")
     private Integer notificationId;
 
-    @Column(name = "user_id", length = 36)
+    @Column(name = "user_id", columnDefinition = "char(36)")
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
