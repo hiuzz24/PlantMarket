@@ -26,7 +26,7 @@ public class Comment {
     @JoinColumn(name = "post_id", insertable = false, updatable = false)
     private Post post;
 
-    @Column(name = "user_id", length = 36)
+    @Column(name = "user_id", columnDefinition = "char(36)")
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

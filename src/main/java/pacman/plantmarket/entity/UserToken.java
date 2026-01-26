@@ -21,7 +21,7 @@ public class UserToken {
     @Column(name = "token_id")
     private Integer tokenId;
 
-    @Column(name = "user_id", length = 36)
+    @Column(name = "user_id", columnDefinition = "char(36)")
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

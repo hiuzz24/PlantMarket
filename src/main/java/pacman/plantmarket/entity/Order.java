@@ -23,7 +23,7 @@ public class Order {
     @Column(name = "order_code", unique = true)
     private Long orderCode;
 
-    @Column(name = "user_id", length = 36)
+    @Column(name = "user_id", columnDefinition = "char(36)")
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

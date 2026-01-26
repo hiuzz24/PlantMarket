@@ -20,6 +20,13 @@ spring:
     time-zone: Asia/Ho_Chi_Minh
   main:
     allow-circular-references: true
+  ai:
+    openai:
+      api-key: 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
+      base-url: https://openrouter.ai/api
+      chat:
+        options:
+          model: google/gemma-3-27b-it:free
 jwt:
   secret: IAmPacmanIsSoCoolAndIncrediblyVip2004
 payos:
