@@ -26,10 +26,12 @@ spring:
       base-url: https://openrouter.ai/api
       chat:
         options:
-          model: google/gemma-3-27b-it:free
+          model: google/gemini-2.0-flash-001
 jwt:
   secret: IAmPacmanIsSoCoolAndIncrediblyVip2004
 payos:
   client-id: "c8afd23e-d746-403b-a2ee-03e3b6a62348"
   api-key: "6da31a52-547d-489d-97a2-cbba0450ab5d"
   checksum-key: "03ed2aac3c7dfbbe1e3cf434b5d7f29217275036d0fbbfcc096aca33dcd9b044"
+google:
+  client-id: "165583300979-g5jms9hd372eff53a3ho22vtf5bba82m.apps.googleusercontent.com"

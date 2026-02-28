@@ -166,12 +166,8 @@ VALUES ('ADMIN'),
 
 INSERT INTO users (user_id, username, password, email, full_name, avatar_url, phone, address, role_id, status,
                    created_at, updated_at)
-VALUES (UUID(), 'admin1', '123', 'admin1@example.com', 'Admin One', 'https://example.com/avatar1.png', '0123456789',
-        '123 Admin Street', 1, 1, NOW(), NOW()),
-       (UUID(), 'user1', '123', 'user1@example.com', 'User One', 'https://example.com/avatar2.png', '0987654321',
-        '456 User Avenue', 2, 1, NOW(), NOW()),
-       (UUID(), 'user2', '123', 'user2@example.com', 'User two', 'https://example.com/avatar3.png', '0112233445',
-        '789 Mod Lane', 2, 1, NOW(), NOW());
+VALUES (UUID(), 'pacman', 'pacmanzz', 'pacman@example.com', 'Admin One', 'https://example.com/avatar1.png', '0123456789',
+        '123 Admin Street', 1, 1, NOW(), NOW())
 
 -- Categories
 INSERT INTO categories (category_name, is_deleted, description)

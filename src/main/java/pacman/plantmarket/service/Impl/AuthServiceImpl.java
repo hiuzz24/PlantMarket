@@ -1,6 +1,11 @@
 package pacman.plantmarket.service.Impl;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +25,8 @@ import pacman.plantmarket.security.JwtService;
 import pacman.plantmarket.service.AuthService;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +35,9 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final UserTokenRepository userTokenRepository;
+
+    @Value("${google.client-id}")
+    private String googleClientId;
 
 
     @Override
@@ -82,5 +92,52 @@ public class AuthServiceImpl implements AuthService {
         return new LoginResponseDTO(accessToken);
     }
 
+    @Override
+    public TokenPairDTO registerGoogleUser(String token) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                    .setAudience(Collections.singletonList(googleClientId))
+                    .build();
 
+            GoogleIdToken idToken = verifier.verify(token);
+
+            if (idToken == null) {
+                throw new RuntimeException("Invalid Google Token");
+            }
+
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String email = payload.getEmail();
+
+            User user = userRepository.findByEmail(email)
+                    .orElseGet(() -> {
+                        User newUser = User.builder()
+                                .userId(UUID.randomUUID().toString())
+                                .email(email)
+                                .username(email)
+                                .password("GOOGLE_AUTH_NOPASS")
+                                .fullName((String) payload.get("name"))
+                                .avatarUrl((String) payload.get("picture"))
+                                .roleId(2)
+                                .status(true)
+                                .build();
+                        return userRepository.save(newUser);
+                    });
+
+            UserDetails userDetails = org.springframework.security.core.userdetails.User
+                    .withUsername(user.getEmail())
+                    .password(user.getPassword())
+                    .authorities("ROLE_USER")
+                    .build();
+
+            String accessToken = jwtService.generateAccessToken(userDetails);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            saveRefreshToken(user, refreshToken);
+
+            return new TokenPairDTO(accessToken, refreshToken);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi xác thực Google: " + e.getMessage());
+        }
+    }
 }
