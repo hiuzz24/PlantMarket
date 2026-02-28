@@ -11,10 +11,12 @@ import pacman.plantmarket.dto.LoginResponseDTO;
 import pacman.plantmarket.dto.TokenPairDTO;
 import pacman.plantmarket.service.AuthService;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 
@@ -31,6 +33,26 @@ public class AuthController {
                 .build();
 
         response.addHeader("Set-Cookie",cookie.toString());
+
+        return ResponseEntity.ok(new LoginResponseDTO(tokenPairDTO.getAccessToken()));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> request, HttpServletResponse response) {
+        String googleToken = request.get("token");
+        log.info("Token nhận được: [" + googleToken + "]");
+        TokenPairDTO tokenPairDTO = authService.registerGoogleUser(googleToken);
+
+        ResponseCookie cookie = ResponseCookie
+                .from("refreshToken", tokenPairDTO.getRefreshToken())
+                .httpOnly(true)
+                .path("/api/refreshToken")
+                .maxAge(60 * 60 * 24 * 7)
+                .sameSite("Strict")
+                .secure(true)
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
 
         return ResponseEntity.ok(new LoginResponseDTO(tokenPairDTO.getAccessToken()));
     }

@@ -10,4 +10,6 @@ public interface AuthService {
     void logout(String refreshToken);
     void saveRefreshToken(User user,String refreshToken);
     LoginResponseDTO generateNewAccessToken(String refreshToken);
+    TokenPairDTO registerGoogleUser(String token);
+
 }

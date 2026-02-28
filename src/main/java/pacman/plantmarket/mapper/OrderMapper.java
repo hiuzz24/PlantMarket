@@ -6,7 +6,7 @@ import org.mapstruct.MappingTarget;
 import pacman.plantmarket.dto.OrderDTO;
 import pacman.plantmarket.entity.Order;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {OrderDetailMapper.class})
 public interface OrderMapper {
     OrderDTO toDTO(Order order);
     Order toEntity(OrderDTO orderDTO);
