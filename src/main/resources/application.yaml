@@ -1,5 +1,7 @@
 server:
   port: 8080
+  error:
+    include-message: always
 spring:
   application:
     name: plant_market
@@ -10,8 +12,10 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     hikari:
       maximum-pool-size: 3
-      minimum-idle: 1
-      connection-timeout: 20000
+      minimum-idle: 0
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,10 +24,14 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
+        show_sql: false
+        format_sql: false
+    open-in-view: false
   jackson:
     time-zone: Asia/Ho_Chi_Minh
   main:
     allow-circular-references: true
+    banner-mode: off
   ai:
     openai:
       api-key: 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
